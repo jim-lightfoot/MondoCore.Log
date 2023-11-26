@@ -10,7 +10,7 @@
  *  Original Author: Jim Lightfoot                                          
  *    Creation Date: 8 Aug 2020                                            
  *                                                                          
- *   Copyright (c) 2020 - Jim Lightfoot, All rights reserved                
+ *   Copyright (c) 2020-2023 - Jim Lightfoot, All rights reserved                
  *                                                                          
  *  Licensed under the MIT license:                                         
  *    http://www.opensource.org/licenses/mit-license.php                    
@@ -32,13 +32,13 @@ namespace MondoCore.Log
     public class RequestLog : IRequestLog
     {
         private readonly ILog           _log;
-        private readonly IDisposable    _operation;
+        private readonly IDisposable?   _operation;
         private readonly IDictionary<string, object> _properties = new Dictionary<string, object>();
-        private readonly string         _correlationId;
-        private readonly string         _operationName;
-
+        private readonly string?        _correlationId;
+        private readonly string?        _operationName;
+                                
         /*************************************************************************/
-        public RequestLog(ILog log, string operationName = null, string correlationId = null)
+        public RequestLog(ILog log, string? operationName = null, string? correlationId = null)
         {
             _log = log;
 
@@ -52,7 +52,7 @@ namespace MondoCore.Log
         }
 
         /*************************************************************************/
-        public IRequestLog NewRequest(string operationName = null, string correlationId = null)
+        public IRequestLog NewRequest(string? operationName = null, string? correlationId = null)
         {
             if(string.IsNullOrWhiteSpace(operationName))
                 operationName = _operationName;
@@ -73,7 +73,7 @@ namespace MondoCore.Log
         public Task WriteTelemetry(Telemetry telemetry)
         {
             if(_properties.Count > 0)
-                telemetry.Properties = telemetry.Properties.ToDictionary().Merge(_properties);
+                telemetry.Properties = telemetry?.Properties?.ToDictionary()?.Merge(_properties);
 
             telemetry.CorrelationId = string.IsNullOrWhiteSpace(telemetry.CorrelationId) ? _correlationId : telemetry.CorrelationId;
             telemetry.OperationName = string.IsNullOrWhiteSpace(telemetry.OperationName) ? _operationName : telemetry.OperationName;

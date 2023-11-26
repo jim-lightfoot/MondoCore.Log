@@ -101,7 +101,7 @@ namespace MondoCore.Log
         }
 
         /*************************************************************************/
-        public IRequestLog NewRequest(string operationName = null, string correlationId = null)
+        public IRequestLog NewRequest(string? operationName = null, string? correlationId = null)
         {
             return new RequestLog(this, operationName, correlationId);
         }

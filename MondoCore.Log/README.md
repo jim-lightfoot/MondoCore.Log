@@ -67,7 +67,7 @@ Inject the ILog interface
 
 ### Logging with IRequestLog
 
-By creating a scoped RequestLog you can set properties that will exist for every log within that scope. IRequestLog is derived from ILog so you just treat it as an ILog
+By creating a scoped RequestLog you can set properties (aka "custom properties" or "custom dimensions") that will exist for every log within that scope. IRequestLog is derived from ILog so you just treat it as an ILog
  
     using MondoCore.Log;
 

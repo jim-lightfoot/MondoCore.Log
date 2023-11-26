@@ -31,12 +31,12 @@ namespace MondoCore.Log.UnitTests
 
             Assert.AreEqual(1, _errors.Count);
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
-            Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception.Message);
+            Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception?.Message);
 
-            var props = _errors[0].Properties.ToDictionary();
+            var props = _errors[0].Properties?.ToDictionary();
 
-            Assert.AreEqual("Chevy", props["Make"]);
-            Assert.AreEqual("Corvette", props["Model"]);
+            Assert.AreEqual("Chevy", props?["Make"]);
+            Assert.AreEqual("Corvette", props?["Model"]);
         }
 
         [TestMethod]
@@ -49,12 +49,12 @@ namespace MondoCore.Log.UnitTests
 
             Assert.AreEqual(1, _errors.Count);
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
-            Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception.Message);
+            Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception?.Message);
 
-            var props = _errors[0].Properties.ToDictionary();
+            var props = _errors[0].Properties?.ToDictionary();
 
-            Assert.AreEqual("Chevy", props["Make"]);
-            Assert.AreEqual("Corvette", props["Model"]);
+            Assert.AreEqual("Chevy", props?["Make"]);
+            Assert.AreEqual("Corvette", props?["Model"]);
         }
 
         [TestMethod]
@@ -64,12 +64,12 @@ namespace MondoCore.Log.UnitTests
 
             Assert.AreEqual(1, _errors.Count);
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
-            Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception.Message);
+            Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception?.Message);
 
-            var props = _errors[0].Properties.ToDictionary();
+            var props = _errors[0].Properties?.ToDictionary();
 
-            Assert.AreEqual("Chevy", props["Make"]);
-            Assert.AreEqual("Corvette", props["Model"]);
+            Assert.AreEqual("Chevy", props?["Make"]);
+            Assert.AreEqual("Corvette", props?["Model"]);
         }
 
         [TestMethod]
@@ -89,26 +89,26 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual(2, _errors.Count);
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[1].Type);
-            Assert.AreEqual("Fred's hair is on fire", _errors[0].Exception.Message);
-            Assert.AreEqual("Barney's hair is on fire", _errors[1].Exception.Message);
+            Assert.AreEqual("Fred's hair is on fire", _errors[0].Exception?.Message);
+            Assert.AreEqual("Barney's hair is on fire", _errors[1].Exception?.Message);
             Assert.AreEqual("1234", _errors[0].CorrelationId);
             Assert.AreEqual("xyz", _errors[1].CorrelationId);
             Assert.AreEqual("2nd", _errors[0].OperationName);
             Assert.AreEqual("top", _errors[1].OperationName);
 
-            var props = _errors[0].Properties.ToDictionary();
+            var props = _errors[0].Properties?.ToDictionary();
 
-            Assert.AreEqual("Bedrock", props["Town"]);
-            Assert.AreEqual("Chevy", props["Make"]);
-            Assert.AreEqual("Corvette", props["Model"]);
-            Assert.AreEqual("Flintstone", props["LastName"]);
+            Assert.AreEqual("Bedrock", props?["Town"]);
+            Assert.AreEqual("Chevy", props?["Make"]);
+            Assert.AreEqual("Corvette", props?["Model"]);
+            Assert.AreEqual("Flintstone", props?["LastName"]);
 
-            var props2 = _errors[1].Properties.ToDictionary();
+            var props2 = _errors[1].Properties?.ToDictionary();
 
-            Assert.AreEqual("Bedrock", props2["Town"]);
-            Assert.AreEqual("Chevy", props2["Make"]);
-            Assert.AreEqual("Corvette", props2["Model"]);
-            Assert.IsFalse(props2.ContainsKey("LastName"));
+            Assert.AreEqual("Bedrock", props2?["Town"]);
+            Assert.AreEqual("Chevy", props2?["Make"]);
+            Assert.AreEqual("Corvette", props2?["Model"]);
+            Assert.IsFalse(props2?.ContainsKey("LastName"));
         }
 
         [TestMethod]
@@ -128,26 +128,26 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual(2, _errors.Count);
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[1].Type);
-            Assert.AreEqual("Fred's hair is on fire", _errors[0].Exception.Message);
-            Assert.AreEqual("Barney's hair is on fire", _errors[1].Exception.Message);
+            Assert.AreEqual("Fred's hair is on fire", _errors[0].Exception?.Message);
+            Assert.AreEqual("Barney's hair is on fire", _errors[1].Exception?.Message);
             Assert.AreEqual("xyz", _errors[0].CorrelationId);
             Assert.AreEqual("xyz", _errors[1].CorrelationId);
             Assert.AreEqual("top", _errors[0].OperationName);
             Assert.AreEqual("top", _errors[1].OperationName);
 
-            var props = _errors[0].Properties.ToDictionary();
+            var props = _errors[0].Properties?.ToDictionary();
 
-            Assert.AreEqual("Bedrock", props["Town"]);
-            Assert.AreEqual("Chevy", props["Make"]);
-            Assert.AreEqual("Corvette", props["Model"]);
-            Assert.AreEqual("Flintstone", props["LastName"]);
+            Assert.AreEqual("Bedrock", props?["Town"]);
+            Assert.AreEqual("Chevy", props?["Make"]);
+            Assert.AreEqual("Corvette", props?["Model"]);
+            Assert.AreEqual("Flintstone", props?["LastName"]);
 
-            var props2 = _errors[1].Properties.ToDictionary();
+            var props2 = _errors[1].Properties?.ToDictionary();
 
-            Assert.AreEqual("Bedrock", props2["Town"]);
-            Assert.AreEqual("Chevy", props2["Make"]);
-            Assert.AreEqual("Corvette", props2["Model"]);
-            Assert.IsFalse(props2.ContainsKey("LastName"));
+            Assert.AreEqual("Bedrock", props2?["Town"]);
+            Assert.AreEqual("Chevy", props2?["Make"]);
+            Assert.AreEqual("Corvette", props2?["Model"]);
+            Assert.IsFalse(props2?.ContainsKey("LastName"));
         }
 
         /*************************************************************************/
@@ -180,7 +180,7 @@ namespace MondoCore.Log.UnitTests
                 return null;
             }
 
-            public IRequestLog NewRequest(string operationName = null, string correlationId = null)
+            public IRequestLog NewRequest(string? operationName = null, string? correlationId = null)
             {
                 throw new NotImplementedException();
             }
