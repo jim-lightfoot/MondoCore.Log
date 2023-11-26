@@ -17,6 +17,7 @@
  *                                                                           
  ****************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -39,6 +40,26 @@ namespace MondoCore.Log
                 dict1[kv.Key] = kv.Value;
 
             return dict1;
+        }    
+
+        /****************************************************************************/
+        internal static IDictionary<string, object> MergeData(this IDictionary<string, object> dict, Exception ex)
+        {
+            if(dict == null)
+                dict = new Dictionary<string, object>();
+
+            dict.Merge(ex.Data.ToDictionary());
+
+            if(ex.InnerException != null)
+                dict.MergeData(ex.InnerException);
+
+            if(ex is AggregateException aex)
+            {
+                foreach(var innerException in aex.InnerExceptions)
+                    dict.MergeData(innerException);
+            }
+
+            return dict;
         }    
     }
 }
