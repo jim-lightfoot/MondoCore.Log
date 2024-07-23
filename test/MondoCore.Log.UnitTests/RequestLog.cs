@@ -23,7 +23,7 @@ namespace MondoCore.Log.UnitTests
         }
 
         [TestMethod]
-        public async Task Log_WriteError()
+        public async Task RequestLog_WriteError()
         {
             _log.SetProperty("Model", "Corvette");
 
@@ -40,7 +40,7 @@ namespace MondoCore.Log.UnitTests
         }
 
         [TestMethod]
-        public async Task Log_WriteError2()
+        public async Task RequestLog_WriteError2()
         {
             _log.SetProperty("Make", "Chevy");
             _log.SetProperty("Model", "Corvette");
@@ -58,7 +58,7 @@ namespace MondoCore.Log.UnitTests
         }
 
         [TestMethod]
-        public async Task Log_WriteError3()
+        public async Task RequestLog_WriteError3()
         {
             await _log.WriteError(new Exception("Bob's hair is on fire"), properties: new {Make = "Chevy", Model = "Corvette" } );
 
@@ -73,7 +73,7 @@ namespace MondoCore.Log.UnitTests
         }
 
         [TestMethod]
-        public async Task Log_WriteError_nested()
+        public async Task RequestLog_WriteError_nested()
         {
             _log.SetProperty("Town", "Bedrock");
 
@@ -112,7 +112,53 @@ namespace MondoCore.Log.UnitTests
         }
 
         [TestMethod]
-        public async Task Log_WriteError_nested2()
+        public async Task RequestLog_WriteError_nested2()
+        {
+            _log.SetProperty("Town", "Bedrock");
+
+            using var request1 = _log.NewRequest(operationName: "2nd", correlationId: "1234", properties: new { LastName = "Flintstone" } );
+            using var request2 = request1.NewRequest(operationName: "2nd", correlationId: "1234", properties: new { FirstName = "Fred" } );
+
+            await request2.WriteError(new Exception("Barney's hair is on fire"), properties: new {Make = "Chevy", Model = "Corvette" } );
+
+            var props = _errors[0].Properties?.ToDictionary();
+
+            Assert.AreEqual("Bedrock",      props?["Town"]);
+            Assert.AreEqual("Fred",         props?["FirstName"]);
+            Assert.AreEqual("Flintstone",   props?["LastName"]);
+            Assert.AreEqual("Chevy",        props?["Make"]);
+            Assert.AreEqual("Corvette",     props?["Model"]);
+        }
+
+        [TestMethod]
+        public async Task RequestLog_WriteError_nested2a()
+        {
+            _log.SetProperty("Town", "Bedrock");
+
+            { 
+                using var request1 = _log.NewRequest(operationName: "2nd", correlationId: "1234", properties: new { LastName = "Flintstone" } );
+                using var request2 = request1.NewRequest(operationName: "2nd", correlationId: "1234", properties: new { FirstName = "Fred" } );
+
+                await request2.WriteError(new Exception("Barney's hair is on fire"), properties: new {Make = "Chevy", Model = "Corvette" } );
+
+                var props = _errors[0].Properties?.ToDictionary();
+
+                Assert.AreEqual("Bedrock",      props?["Town"]);
+                Assert.AreEqual("Fred",         props?["FirstName"]);
+                Assert.AreEqual("Flintstone",   props?["LastName"]);
+                Assert.AreEqual("Chevy",        props?["Make"]);
+                Assert.AreEqual("Corvette",     props?["Model"]);
+            }
+
+            await _log.WriteError(new Exception("Barney's hair is on fire"), properties: new {Make = "Chevy", Model = "Corvette" } );
+
+            var props2 = _errors[1].Properties?.ToDictionary();
+
+            Assert.AreEqual(3, props2.Count);
+        }
+
+        [TestMethod]
+        public async Task RequestLog_WriteError_nested3()
         {
             _log.SetProperty("Town", "Bedrock");
 
@@ -180,7 +226,7 @@ namespace MondoCore.Log.UnitTests
                 return null;
             }
 
-            public IRequestLog NewRequest(string? operationName = null, string? correlationId = null)
+            public IRequestLog NewRequest(string? operationName = null, string? correlationId = null, object? properties = null)
             {
                 throw new NotImplementedException();
             }

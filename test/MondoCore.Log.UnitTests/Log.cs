@@ -252,7 +252,7 @@ namespace MondoCore.Log.UnitTests
                 return null;
             }
 
-            public IRequestLog NewRequest(string? operationName = null, string? correlationId = null)
+            public IRequestLog NewRequest(string? operationName = null, string? correlationId = null, object? properties = null)
             {
                 throw new NotImplementedException();
             }

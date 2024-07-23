@@ -10,7 +10,7 @@
  *  Original Author: Jim Lightfoot                                          
  *    Creation Date: 1 Aug 2020                                             
  *                                                                          
- *   Copyright (c) 2020-2023 - Jim Lightfoot, All rights reserved                
+ *   Copyright (c) 2020-2024 - Jim Lightfoot, All rights reserved                
  *                                                                          
  *  Licensed under the MIT license:                                         
  *    http://www.opensource.org/licenses/mit-license.php                    
@@ -32,7 +32,7 @@ namespace MondoCore.Log
     {
         Task        WriteTelemetry(Telemetry telemetry);
         IDisposable StartOperation(string operationName);
-        IRequestLog NewRequest(string? operationName = null, string? correlationId = null);
+        IRequestLog NewRequest(string? operationName = null, string? correlationId = null, object? properties = null);
 
         #region Default Methods
 

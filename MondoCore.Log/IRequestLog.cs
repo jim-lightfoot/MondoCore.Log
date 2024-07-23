@@ -10,7 +10,7 @@
  *  Original Author: Jim Lightfoot                                          
  *    Creation Date: 8 Aug 2020                                             
  *                                                                          
- *   Copyright (c) 2020-2023 - Jim Lightfoot, All rights reserved                
+ *   Copyright (c) 2020-2024 - Jim Lightfoot, All rights reserved                
  *                                                                          
  *  Licensed under the MIT license:                                         
  *    http://www.opensource.org/licenses/mit-license.php                    
@@ -38,5 +38,21 @@ namespace MondoCore.Log
         /// <param name="name"></param>
         /// <param name="value"></param>
         void SetProperty(string name, object value);
+
+        #region Default Methods
+        
+        /// <summary>
+        /// Sets a set of properties for this request. Each  property will be logged with every subsequent logging entry
+        /// </summary>
+        /// <param name="value">An anonymous object, POCO or dictionary</param>
+        public void SetProperties(object properties)
+        {
+            var dict = properties.ToDictionary();
+
+            foreach(var property in dict)
+                this.SetProperty(property.Key, property.Value);
+        }
+
+        #endregion
     }
 }
