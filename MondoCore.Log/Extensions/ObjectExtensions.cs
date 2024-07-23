@@ -2,7 +2,7 @@
  *                                                                           
  *    The MondoCore Libraries  							                     
  *                                                                           
- *        Namespace: MondoCore.Common							             
+ *        Namespace: MondoCore.Log							             
  *             File: ObjectExtensions.cs					    		         
  *        Class(es): ObjectExtensions				         		             
  *          Purpose: Extensions for objects. Note: This code copied from the main MondoCore repository
@@ -10,7 +10,7 @@
  *  Original Author: Jim Lightfoot                                           
  *    Creation Date: 1 Jan 2020                                              
  *                                                                           
- *   Copyright (c) 2005-2023 - Jim Lightfoot, All rights reserved            
+ *   Copyright (c) 2005-2024 - Jim Lightfoot, All rights reserved            
  *                                                                           
  *  Licensed under the MIT license:                                          
  *    http://www.opensource.org/licenses/mit-license.php                     
@@ -34,7 +34,7 @@ namespace MondoCore.Log
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal static IDictionary<string, object> ToDictionary(this object obj)
+        internal static IDictionary<string, object>? ToDictionary(this object obj)
         {
             if (obj == null)
                 return null;

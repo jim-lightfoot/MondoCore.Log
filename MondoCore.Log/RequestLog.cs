@@ -10,7 +10,7 @@
  *  Original Author: Jim Lightfoot                                          
  *    Creation Date: 8 Aug 2020                                            
  *                                                                          
- *   Copyright (c) 2020-2023 - Jim Lightfoot, All rights reserved                
+ *   Copyright (c) 2020-2024 - Jim Lightfoot, All rights reserved                
  *                                                                          
  *  Licensed under the MIT license:                                         
  *    http://www.opensource.org/licenses/mit-license.php                    
@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MondoCore.Log
@@ -52,7 +53,7 @@ namespace MondoCore.Log
         }
 
         /*************************************************************************/
-        public IRequestLog NewRequest(string? operationName = null, string? correlationId = null)
+        public IRequestLog NewRequest(string? operationName = null, string? correlationId = null, object? properties = null)
         {
             if(string.IsNullOrWhiteSpace(operationName))
                 operationName = _operationName;
@@ -60,7 +61,12 @@ namespace MondoCore.Log
             if(string.IsNullOrWhiteSpace(correlationId))
                 correlationId = _correlationId;
 
-            return new RequestLog(this, operationName, correlationId);
+            IRequestLog request = new RequestLog(this, operationName, correlationId);
+
+            if(properties != null)
+                request.SetProperties(properties);
+
+            return request;
         }
 
         /*************************************************************************/
@@ -72,7 +78,7 @@ namespace MondoCore.Log
         /*************************************************************************/
         public Task WriteTelemetry(Telemetry telemetry)
         {
-            if(_properties.Count > 0)
+            if(_properties.Any())
                 telemetry.Properties = telemetry?.Properties?.ToDictionary()?.Merge(_properties);
 
             telemetry.CorrelationId = string.IsNullOrWhiteSpace(telemetry.CorrelationId) ? _correlationId : telemetry.CorrelationId;

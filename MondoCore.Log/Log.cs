@@ -10,7 +10,7 @@
  *  Original Author: Jim Lightfoot                                          
  *    Creation Date: 11 Apr 2014                                             
  *                                                                          
- *   Copyright (c) 2014-2023 - Jim Lightfoot, All rights reserved                
+ *   Copyright (c) 2014-2024 - Jim Lightfoot, All rights reserved                
  *                                                                          
  *  Licensed under the MIT license:                                         
  *    http://www.opensource.org/licenses/mit-license.php                    
@@ -101,9 +101,14 @@ namespace MondoCore.Log
         }
 
         /*************************************************************************/
-        public IRequestLog NewRequest(string? operationName = null, string? correlationId = null)
+        public IRequestLog NewRequest(string? operationName = null, string? correlationId = null, object? properties = null)
         {
-            return new RequestLog(this, operationName, correlationId);
+            IRequestLog request = new RequestLog(this, operationName, correlationId);
+
+            if(properties != null)
+                request.SetProperties(properties);
+
+            return request;
         }
 
         #endregion
