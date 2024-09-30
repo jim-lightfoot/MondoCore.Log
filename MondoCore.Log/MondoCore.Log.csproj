@@ -8,17 +8,24 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/jim-lightfoot/MondoCore.Log</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <Title>MondoCore.Log</Title>
     <Description>Modern logging library</Description>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>Add availability telemetry</PackageReleaseNotes>
+    <PackageTags>logging;logger</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 

@@ -79,7 +79,7 @@ namespace MondoCore.Log
         public Task WriteTelemetry(Telemetry telemetry)
         {
             if(_properties.Any())
-                telemetry.Properties = telemetry?.Properties?.ToDictionary()?.Merge(_properties);
+                telemetry.Properties = telemetry?.Properties.ToDictionary().Merge(_properties);
 
             telemetry.CorrelationId = string.IsNullOrWhiteSpace(telemetry.CorrelationId) ? _correlationId : telemetry.CorrelationId;
             telemetry.OperationName = string.IsNullOrWhiteSpace(telemetry.OperationName) ? _operationName : telemetry.OperationName;

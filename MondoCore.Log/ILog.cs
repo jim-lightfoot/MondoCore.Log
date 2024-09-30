@@ -55,7 +55,6 @@ namespace MondoCore.Log
         ///   Use xml to pass properties (only logs elements under root):
         ///     log.WriteEvent("Message received", XmlDoc.LoadXml("<Root><Category>Blue</Category><Level>4</Level></Root>") );
         /// </example>
-        /// <param name="log">Log to write to</param>
         /// <param name="ex">Exception to log</param>
         /// <param name="properties">See examples</param>
         /// <param name="correlationId">A value to correlate actions across calls and processes</param>
@@ -73,7 +72,6 @@ namespace MondoCore.Log
        /// <summary>
         /// Write an event to the log
         /// </summary>
-        /// <param name="log">Log to write to</param>
         /// <param name="eventName">Name of event to write</param>
         /// <param name="properties">See examples in WriteError</param>
         /// <param name="metrics">An optional dictionary of metrics to write</param>
@@ -92,7 +90,6 @@ namespace MondoCore.Log
         /// <summary>
         /// Write a metric to the log
         /// </summary>
-        /// <param name="log">Log to write to</param>
         /// <param name="metricName">Name of metric to write</param>
         /// <param name="value">Value of metric</param>
         /// <param name="properties">See examples in WriteError</param>
@@ -111,7 +108,6 @@ namespace MondoCore.Log
         /// <summary>
         /// Write a trace to the log
         /// </summary>
-        /// <param name="log">Log to write to</param>
         /// <param name="message">Message to write</param>
         /// <param name="severity">Severity of trace</param>
         /// <param name="properties">See examples in WriteError</param>
@@ -130,7 +126,6 @@ namespace MondoCore.Log
         /// <summary>
         /// Write a request to the log
         /// </summary>
-        /// <param name="log">Log to write to</param>
         /// <param name="name">Name of request</param>
         /// <param name="startTime">Time request started</param>
         /// <param name="duration">Duration of request</param>
@@ -154,6 +149,16 @@ namespace MondoCore.Log
                                                     });
         }
 
+
+        /// <summary>
+        /// Write a request to the log
+        /// </summary>
+        /// <param name="telemetry">AvailabilityTelemetry to write</param>
+        public Task WriteAvailability(AvailabilityTelemetry telemetry)
+        {
+            return this.WriteTelemetry(telemetry);
+        }
+
         #endregion
     }
        
@@ -169,9 +174,10 @@ namespace MondoCore.Log
         public object?          Properties      { get; set; }
         public double           Value           { get; set; }
         public LogSeverity      Severity        { get; set; }
+        public DateTimeOffset?  Timestamp       { get; set; }
 
         public IDictionary<string, double>? Metrics { get; set; }
-        public RequestParams? Request           { get; set; }
+        public RequestParams?               Request { get; set; }
 
         public enum TelemetryType
         {
@@ -179,7 +185,8 @@ namespace MondoCore.Log
             Event,
             Metric,
             Trace,
-            Request
+            Request,
+            Availability
         }
 
         public class RequestParams
@@ -198,5 +205,23 @@ namespace MondoCore.Log
             Error       = 3,
             Critical    = 4
         }
-    }       
+    }  
+    
+    /*************************************************************************/
+    /*************************************************************************/
+    public class AvailabilityTelemetry : Telemetry
+    {
+        public AvailabilityTelemetry()
+        {
+            this.Type = TelemetryType.Availability;
+        }
+
+        public TimeSpan Duration     { get; set; } 
+        public string   TestId       { get; set; } = ""; 
+        public string   TestName     { get; set; } = ""; 
+        public string   RunLocation  { get; set; } = ""; 
+        public string   Sequence     { get; set; } = ""; 
+        public bool     Success      { get; set; }
+
+    }
 }
