@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 using MondoCore.Log;
+using MondoCore.Collections;
 
 namespace MondoCore.Log.UnitTests
 {
@@ -48,7 +49,7 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual(1, _errors.Count);
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
             Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception?.Message);
-            Assert.AreEqual("Chevy", _errors[0].Properties?.ToDictionary()?["Model"]);
+            Assert.AreEqual("Chevy", _errors[0].Properties?.ToReadOnlyDictionary()?["Model"]);
         }
 
         [TestMethod]
@@ -70,10 +71,10 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
             Assert.AreEqual("Alices's hair is on fire", _errors[0].Exception?.Message);
 
-            Assert.AreEqual("Chevy",    _errors[0].Properties?.ToDictionary()["Make"]);
-            Assert.AreEqual("Corvette", _errors[0].Properties?.ToDictionary()["Model"]);
-            Assert.AreEqual("Blue",     _errors[0].Properties?.ToDictionary()["Color"]);
-            Assert.AreEqual("1956",     _errors[0].Properties?.ToDictionary()["Year"]);
+            Assert.AreEqual("Chevy",    _errors[0].Properties?.ToReadOnlyDictionary()["Make"]);
+            Assert.AreEqual("Corvette", _errors[0].Properties?.ToReadOnlyDictionary()["Model"]);
+            Assert.AreEqual("Blue",     _errors[0].Properties?.ToReadOnlyDictionary()["Color"]);
+            Assert.AreEqual("1956",     _errors[0].Properties?.ToReadOnlyDictionary()["Year"]);
         }
 
         [TestMethod]
@@ -96,11 +97,11 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual(1, _errors.Count);
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
 
-            Assert.AreEqual("Chevy",    _errors[0].Properties?.ToDictionary()["Make"]);
-            Assert.AreEqual("Corvette", _errors[0].Properties?.ToDictionary()["Model"]);
-            Assert.AreEqual("Blue",     _errors[0].Properties?.ToDictionary()["Color"]);
-            Assert.AreEqual("1956",     _errors[0].Properties?.ToDictionary()["Year"]);
-            Assert.AreEqual("350",     _errors[0].Properties?.ToDictionary()["Engine"]);
+            Assert.AreEqual("Chevy",    _errors[0].Properties?.ToReadOnlyDictionary()["Make"]);
+            Assert.AreEqual("Corvette", _errors[0].Properties?.ToReadOnlyDictionary()["Model"]);
+            Assert.AreEqual("Blue",     _errors[0].Properties?.ToReadOnlyDictionary()["Color"]);
+            Assert.AreEqual("1956",     _errors[0].Properties?.ToReadOnlyDictionary()["Year"]);
+            Assert.AreEqual("350",     _errors[0].Properties?.ToReadOnlyDictionary()["Engine"]);
         }
 
         [TestMethod]

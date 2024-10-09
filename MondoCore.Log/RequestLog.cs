@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using MondoCore.Collections;
+
 namespace MondoCore.Log
 {
     /*************************************************************************/
@@ -34,7 +36,7 @@ namespace MondoCore.Log
     {
         private readonly ILog           _log;
         private readonly IDisposable?   _operation;
-        private readonly IDictionary<string, object> _properties = new Dictionary<string, object>();
+        private readonly Dictionary<string, object?> _properties = new();
         private readonly string?        _correlationId;
         private readonly string?        _operationName;
                                 
@@ -79,10 +81,10 @@ namespace MondoCore.Log
         public Task WriteTelemetry(Telemetry telemetry)
         {
             if(_properties.Any())
-                telemetry.Properties = telemetry?.Properties.ToDictionary().Merge(_properties);
+                telemetry.Properties = telemetry?.Properties.ToReadOnlyDictionary().Merge(_properties!);
 
-            telemetry.CorrelationId = string.IsNullOrWhiteSpace(telemetry.CorrelationId) ? _correlationId : telemetry.CorrelationId;
-            telemetry.OperationName = string.IsNullOrWhiteSpace(telemetry.OperationName) ? _operationName : telemetry.OperationName;
+            telemetry!.CorrelationId = string.IsNullOrWhiteSpace(telemetry!.CorrelationId) ? _correlationId : telemetry!.CorrelationId;
+            telemetry.OperationName  = string.IsNullOrWhiteSpace(telemetry!.OperationName) ? _operationName : telemetry!.OperationName;
 
             return _log.WriteTelemetry(telemetry);
         }

@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MondoCore.Log", "MondoCore.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{39C78CB1-9FF6-426C-AD91-911C2A2F3A2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MondoCore.Log.UnitTests", "test\MondoCore.Log.UnitTests\MondoCore.Log.UnitTests.csproj", "{652C8E79-052A-4154-8849-E9F4A275BDD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MondoCore.Log.UnitTests", "test\MondoCore.Log.UnitTests\MondoCore.Log.UnitTests.csproj", "{652C8E79-052A-4154-8849-E9F4A275BDD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

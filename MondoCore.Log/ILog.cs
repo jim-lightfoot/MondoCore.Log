@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using MondoCore.Collections;
+
 namespace MondoCore.Log
 {
     /*************************************************************************/
@@ -60,12 +62,14 @@ namespace MondoCore.Log
         /// <param name="correlationId">A value to correlate actions across calls and processes</param>
         Task WriteError(Exception ex, Telemetry.LogSeverity severity = Telemetry.LogSeverity.Error, object? properties = null, string? correlationId = null)
         {
+            var props = properties.ToReadOnlyDictionary().MergeData(ex);
+
             return this.WriteTelemetry(new Telemetry { 
                                                         Type          = Telemetry.TelemetryType.Error, 
                                                         Exception     = ex,
                                                         Severity      = severity,
                                                         CorrelationId = correlationId,
-                                                        Properties    = properties.ToDictionary().MergeData(ex)
+                                                        Properties    = props,
                                                     });
         }
 
