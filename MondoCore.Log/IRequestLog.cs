@@ -18,9 +18,8 @@
  ****************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+
+using MondoCore.Collections;
 
 namespace MondoCore.Log
 {
@@ -47,7 +46,7 @@ namespace MondoCore.Log
         /// <param name="value">An anonymous object, POCO or dictionary</param>
         public void SetProperties(object properties)
         {
-            var dict = properties.ToDictionary();
+            var dict = properties.ToReadOnlyDictionary();
 
             foreach(var property in dict)
                 this.SetProperty(property.Key, property.Value);

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
+using MondoCore.Collections;
 using MondoCore.Log;
 
 namespace MondoCore.Log.UnitTests
@@ -33,7 +34,7 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
             Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception?.Message);
 
-            var props = _errors[0].Properties?.ToDictionary();
+            var props = _errors[0].Properties?.ToReadOnlyDictionary();
 
             Assert.AreEqual("Chevy", props?["Make"]);
             Assert.AreEqual("Corvette", props?["Model"]);
@@ -51,7 +52,7 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
             Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception?.Message);
 
-            var props = _errors[0].Properties?.ToDictionary();
+            var props = _errors[0].Properties?.ToReadOnlyDictionary();
 
             Assert.AreEqual("Chevy", props?["Make"]);
             Assert.AreEqual("Corvette", props?["Model"]);
@@ -66,7 +67,7 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual(Telemetry.TelemetryType.Error, _errors[0].Type);
             Assert.AreEqual("Bob's hair is on fire", _errors[0].Exception?.Message);
 
-            var props = _errors[0].Properties?.ToDictionary();
+            var props = _errors[0].Properties?.ToReadOnlyDictionary();
 
             Assert.AreEqual("Chevy", props?["Make"]);
             Assert.AreEqual("Corvette", props?["Model"]);
@@ -96,14 +97,14 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual("2nd", _errors[0].OperationName);
             Assert.AreEqual("top", _errors[1].OperationName);
 
-            var props = _errors[0].Properties?.ToDictionary();
+            var props = _errors[0].Properties?.ToReadOnlyDictionary();
 
             Assert.AreEqual("Bedrock", props?["Town"]);
             Assert.AreEqual("Chevy", props?["Make"]);
             Assert.AreEqual("Corvette", props?["Model"]);
             Assert.AreEqual("Flintstone", props?["LastName"]);
 
-            var props2 = _errors[1].Properties?.ToDictionary();
+            var props2 = _errors[1].Properties?.ToReadOnlyDictionary();
 
             Assert.AreEqual("Bedrock", props2?["Town"]);
             Assert.AreEqual("Chevy", props2?["Make"]);
@@ -121,7 +122,7 @@ namespace MondoCore.Log.UnitTests
 
             await request2.WriteError(new Exception("Barney's hair is on fire"), properties: new {Make = "Chevy", Model = "Corvette" } );
 
-            var props = _errors[0].Properties?.ToDictionary();
+            var props = _errors[0].Properties?.ToReadOnlyDictionary();
 
             Assert.AreEqual("Bedrock",      props?["Town"]);
             Assert.AreEqual("Fred",         props?["FirstName"]);
@@ -141,7 +142,7 @@ namespace MondoCore.Log.UnitTests
 
                 await request2.WriteError(new Exception("Barney's hair is on fire"), properties: new {Make = "Chevy", Model = "Corvette" } );
 
-                var props = _errors[0].Properties?.ToDictionary();
+                var props = _errors[0].Properties?.ToReadOnlyDictionary();
 
                 Assert.AreEqual("Bedrock",      props?["Town"]);
                 Assert.AreEqual("Fred",         props?["FirstName"]);
@@ -152,9 +153,9 @@ namespace MondoCore.Log.UnitTests
 
             await _log.WriteError(new Exception("Barney's hair is on fire"), properties: new {Make = "Chevy", Model = "Corvette" } );
 
-            var props2 = _errors[1].Properties?.ToDictionary();
+            var props2 = _errors[1].Properties?.ToReadOnlyDictionary();
 
-            Assert.AreEqual(3, props2.Count);
+            Assert.AreEqual(3, props2.Count());
         }
 
         [TestMethod]
@@ -181,14 +182,14 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual("top", _errors[0].OperationName);
             Assert.AreEqual("top", _errors[1].OperationName);
 
-            var props = _errors[0].Properties?.ToDictionary();
+            var props = _errors[0].Properties?.ToReadOnlyDictionary();
 
             Assert.AreEqual("Bedrock", props?["Town"]);
             Assert.AreEqual("Chevy", props?["Make"]);
             Assert.AreEqual("Corvette", props?["Model"]);
             Assert.AreEqual("Flintstone", props?["LastName"]);
 
-            var props2 = _errors[1].Properties?.ToDictionary();
+            var props2 = _errors[1].Properties?.ToReadOnlyDictionary();
 
             Assert.AreEqual("Bedrock", props2?["Town"]);
             Assert.AreEqual("Chevy", props2?["Make"]);
