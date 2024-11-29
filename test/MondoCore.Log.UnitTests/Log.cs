@@ -27,6 +27,8 @@ namespace MondoCore.Log.UnitTests
             _log = log;
         }
 
+        #region WriteError
+
         [TestMethod]
         public async Task Log_WriteError()
         {
@@ -104,25 +106,6 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual("350",     _errors[0].Properties?.ToReadOnlyDictionary()["Engine"]);
         }
 
-        [TestMethod]
-        public async Task Log_WriteEvent()
-        {
-            await _log.WriteEvent("Race", new { Model = "Chevy" });
-
-            Assert.AreEqual(1, _errors.Count);
-            Assert.AreEqual(Telemetry.TelemetryType.Event, _errors[0].Type);
-            Assert.AreEqual("Race", _errors[0].Message);
-        }
-
-        [TestMethod]
-        public async Task Log_WriteTrace()
-        {
-            await _log.WriteTrace("Bob's hair is on fire", Telemetry.LogSeverity.Critical, new { Model = "Chevy" });
-
-            Assert.AreEqual(1, _errors.Count);
-            Assert.AreEqual(Telemetry.TelemetryType.Trace, _errors[0].Type);
-            Assert.AreEqual("Bob's hair is on fire", _errors[0].Message);
-        }
 
         [TestMethod]
         public async Task Log_WriteError_Fallback()
@@ -180,7 +163,6 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual("Bob's hair is on fire", errors3[0].Exception?.Message);
         }
 
-
         [TestMethod]
         public async Task Log_WriteError_MultipleLoggers_filtered()
         {
@@ -222,6 +204,54 @@ namespace MondoCore.Log.UnitTests
             Assert.AreEqual(Telemetry.TelemetryType.Event, errors3[0].Type);
             Assert.AreEqual("No it's not", errors3[0].Message);
         }
+
+        #endregion
+
+        #region WriteEvent
+
+        [TestMethod]
+        public async Task Log_WriteEvent()
+        {
+            var correlationId = Guid.NewGuid().ToString();
+
+            await _log.WriteEvent("Race", new { Model = "Chevy" }, correlationId);
+
+            Assert.AreEqual(1, _errors.Count);
+            Assert.AreEqual(Telemetry.TelemetryType.Event, _errors[0].Type);
+            Assert.AreEqual("Race", _errors[0].Message);
+            Assert.AreEqual(correlationId, _errors[0].CorrelationId);
+        }
+
+        #endregion
+
+        #region WriteTrace
+
+        [TestMethod]
+        public async Task Log_WriteTrace()
+        {
+            await _log.WriteTrace("Bob's hair is on fire", Telemetry.LogSeverity.Critical, new { Model = "Chevy" });
+
+            Assert.AreEqual(1, _errors.Count);
+            Assert.AreEqual(Telemetry.TelemetryType.Trace, _errors[0].Type);
+            Assert.AreEqual("Bob's hair is on fire", _errors[0].Message);
+        }
+
+        #endregion
+
+        #region WriteMetric
+
+        [TestMethod]
+        public async Task Log_WriteMetric()
+        {
+            await _log.WriteMetric("Length of Bob's Hair", 42d, new { Model = "Chevy" });
+
+            Assert.AreEqual(1, _errors.Count);
+            Assert.AreEqual(Telemetry.TelemetryType.Metric, _errors[0].Type);
+            Assert.AreEqual("Length of Bob's Hair", _errors[0].Message);
+            Assert.AreEqual(42d, _errors[0]!.Value);
+        }
+
+        #endregion
 
         /*************************************************************************/
         /*************************************************************************/
