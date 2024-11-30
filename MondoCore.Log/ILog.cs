@@ -87,17 +87,17 @@ namespace MondoCore.Log
         }
 
         /// <summary>
-        /// Write an event to the log
+        /// Write a series of metrics to the log
         /// </summary>
-        /// <param name="eventName">Name of event to write</param>
+        /// <param name="metricNamespace">Namespace of metrics being</param>
         /// <param name="properties">See examples in WriteError</param>
-        /// <param name="metrics">An optional dictionary of metrics to write</param>
+        /// <param name="metrics">A dictionary of metrics to write</param>
         /// <param name="correlationId">A value to correlate actions across calls and processes</param>
-        public Task WriteMetrics(string metricName, object? properties = null, IDictionary<string, double>? metrics = null, string? correlationId = null)
+        public Task WriteMetrics(string metricNamespace, IDictionary<string, double>? metrics, object? properties = null, string? correlationId = null)
         {
             return this.WriteTelemetry(new Telemetry { 
                                                         Type          = Telemetry.TelemetryType.Metric, 
-                                                        Message       = metricName,
+                                                        Message       = metricNamespace,
                                                         CorrelationId = correlationId,
                                                         Properties    = properties,
                                                         Metrics       = metrics
