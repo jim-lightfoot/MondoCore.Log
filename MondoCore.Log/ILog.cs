@@ -43,24 +43,20 @@ namespace MondoCore.Log
         /// </summary>
         /// <example>
         ///     Use anonymous objects to pass properties:
-        ///     log.WriteEvent("Message received", new { Category = "Blue", Level = 4 });
+        ///     log.WriteError(ex, properties: new { Category = "Blue", Level = 4 });
         /// </example>        
         /// <example>
         ///     Use non-anonymous (POCO) objects to pass properties (all public properties are logged):
-        ///     log.WriteEvent("Message received", new ProductInfo { Category = "Blue", Level = 4 });
+        ///     log.WriteError(ex, properties: new ProductInfo { Category = "Blue", Level = 4 });
         /// </example>        
         /// <example>
         ///   Use dictionary to pass properties:
-        ///     log.WriteEvent("Message received", new Dictionary<string, object> { {"Category", "Blue"}, {"Level", 4"} });
-        /// </example>
-        /// <example>
-        ///   Use xml to pass properties (only logs elements under root):
-        ///     log.WriteEvent("Message received", XmlDoc.LoadXml("<Root><Category>Blue</Category><Level>4</Level></Root>") );
+        ///     log.WriteError(ex, properties: new Dictionary<string, object> { {"Category", "Blue"}, {"Level", 4"} });
         /// </example>
         /// <param name="ex">Exception to log</param>
         /// <param name="properties">See examples</param>
         /// <param name="correlationId">A value to correlate actions across calls and processes</param>
-        Task WriteError(Exception ex, Telemetry.LogSeverity severity = Telemetry.LogSeverity.Error, object? properties = null, string? correlationId = null)
+        public Task WriteError(Exception ex, Telemetry.LogSeverity severity = Telemetry.LogSeverity.Error, object? properties = null, string? correlationId = null)
         {
             var props = properties.ToReadOnlyDictionary().MergeData(ex);
 
@@ -73,22 +69,39 @@ namespace MondoCore.Log
                                                     });
         }
 
-       /// <summary>
+        /// <summary>
         /// Write an event to the log
         /// </summary>
         /// <param name="eventName">Name of event to write</param>
         /// <param name="properties">See examples in WriteError</param>
         /// <param name="metrics">An optional dictionary of metrics to write</param>
         /// <param name="correlationId">A value to correlate actions across calls and processes</param>
-        public Task WriteEvent(string eventName, object? properties = null, Dictionary<string, double>? metrics = null, string? correlationId = null)
+        public Task WriteEvent(string eventName, object? properties = null, string? correlationId = null)
         {
             return this.WriteTelemetry(new Telemetry { 
                                                         Type          = Telemetry.TelemetryType.Event, 
                                                         Message       = eventName,
                                                         CorrelationId = correlationId,
+                                                        Properties    = properties
+                                                     });
+        }
+
+        /// <summary>
+        /// Write a series of metrics to the log
+        /// </summary>
+        /// <param name="metricNamespace">Namespace of metrics being</param>
+        /// <param name="properties">See examples in WriteError</param>
+        /// <param name="metrics">A dictionary of metrics to write</param>
+        /// <param name="correlationId">A value to correlate actions across calls and processes</param>
+        public Task WriteMetrics(string metricNamespace, IDictionary<string, double>? metrics, object? properties = null, string? correlationId = null)
+        {
+            return this.WriteTelemetry(new Telemetry { 
+                                                        Type          = Telemetry.TelemetryType.Metric, 
+                                                        Message       = metricNamespace,
+                                                        CorrelationId = correlationId,
                                                         Properties    = properties,
                                                         Metrics       = metrics
-                                                    });
+                                                     });
         }
 
         /// <summary>
@@ -106,7 +119,7 @@ namespace MondoCore.Log
                                                         Value         = value,
                                                         CorrelationId = correlationId,
                                                         Properties    = properties
-                                                    });
+                                                     });
         }
 
         /// <summary>
@@ -124,7 +137,7 @@ namespace MondoCore.Log
                                                         Severity      = severity,
                                                         CorrelationId = correlationId,
                                                         Properties    = properties
-                                                    });
+                                                     });
         }
 
         /// <summary>
@@ -135,6 +148,7 @@ namespace MondoCore.Log
         /// <param name="duration">Duration of request</param>
         /// <param name="responseCode">Response code returned from request</param>
         /// <param name="success">True if request was successful</param>
+        /// <param name="properties">See examples in WriteError</param>
         /// <param name="correlationId">A value to correlate actions across calls and processes</param>
         public Task WriteRequest(string name, DateTime startTime, TimeSpan duration, string responseCode, bool success, object? properties = null, string? correlationId = null)
         {
@@ -155,7 +169,7 @@ namespace MondoCore.Log
 
 
         /// <summary>
-        /// Write a request to the log
+        /// Write an availability check to the log
         /// </summary>
         /// <param name="telemetry">AvailabilityTelemetry to write</param>
         public Task WriteAvailability(AvailabilityTelemetry telemetry)
@@ -226,6 +240,5 @@ namespace MondoCore.Log
         public string   RunLocation  { get; set; } = ""; 
         public string   Sequence     { get; set; } = ""; 
         public bool     Success      { get; set; }
-
     }
 }
