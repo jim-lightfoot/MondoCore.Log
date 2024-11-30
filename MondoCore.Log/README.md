@@ -111,6 +111,7 @@ By creating a scoped RequestLog you can set properties (aka "custom properties" 
                 requestLog.SetProperty("Name", name);
                 requestLog.SetProperty("Class", nameof(CoolClass));
                 requestLog.SetProperty("Method", nameof(DoSomethingElse));
+                requestLog.SetProperties(new { name, className, methodName });
 
                 try
                 {
